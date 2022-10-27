@@ -111,59 +111,78 @@
 
                 <!-- Tab info -->
                 <div class="product-tabs single-layout biolife-tab-contain mt-0">
-                    <div class="tab-head">
-                        <ul class="tabs text-nowrap overflow-auto">
-                            <li class="tab-element active"><a href="#nav-info"
-                                                              class="tab-link">{{ trans('visiosoft.extension.biolife_style_provider::field.product_descriptions') }}</a>
-                            </li>
-                            <li class="tab-element"><a href="#addtional-info"
-                                                       class="tab-link">{{ trans('visiosoft.extension.biolife_style_provider::field.addtional_information') }}</a>
-                            </li>
+                    <nav>
+                        <div class="nav nav-tabs nav-fill ad-detail-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link bg-secondary d-block d-sm-none" id="nav-info-tab"
+                               data-toggle="tab" href="#nav-info" role="tab"
+                               aria-controls="nav-info"
+                               aria-selected="true">{{ trans('visiosoft.extension.sahibinden_style_provider::field.ad_info.name') }}</a>
+
+                            <a class="nav-item nav-link active bg-secondary" id="nav-description-tab"
+                               data-toggle="tab" href="#nav-description" role="tab"
+                               aria-controls="nav-description"
+                               aria-selected="true">{{ trans('visiosoft.module.advs::field.description') }}</a>
+
                             {% if not setting_value('visiosoft.module.location::detail_page_location') %}
-                                <li class="tab-element"><a href="#tab_3rd"
-                                                           class="tab-link">{{ trans('visiosoft.module.advs::field.location') }}</a>
-                                </li>
+                                <a class="nav-item nav-link bg-secondary" id="nav-location-tab"
+                                   data-toggle="tab" href="#nav-location" role="tab"
+                                   aria-controls="nav-location"
+                                   aria-selected="true">{{ trans('visiosoft.module.advs::field.location') }}</a>
                             {% endif %}
+
                             <!-- Content Tab With Block -->
                             {{ addBlock('ad-detail/content-tab',{'features':features,'adv':adv})|raw }}
                             <!-- Content Tab With Block -->
-                        </ul>
-                    </div>
-                    <div class="tab-content">
-                        <div id="nav-info" class="tab-contain desc-tab active">
-                            <p>{{ adv.advs_desc|length ? adv.advs_desc|raw : trans('visiosoft.extension.biolife_style_provider::field.no_description') }}</p>
                         </div>
-                        <div id="addtional-info" class="tab-contain addtional-info-tab">
-                            <table class="tbl_attributes">
-                                <tbody>
-                                <tr>
-                                    <th>{{ trans('visiosoft.theme.sahibinden::field.price.name') }}</th>
-                                    <td>
-                                        <p>
-                                            {% if not setting_value('visiosoft.module.advs::hide_zero_price') or adv.price != "0" %}
-                                                {{ adv.currency_price }}
-                                            {% else %}
-                                                {{ trans('visiosoft.theme.sahibinden::field.ask_for_price') }}
-                                            {% endif %}
-                                        </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>{{ trans('visiosoft.theme.sahibinden::field.ad.name') }}</th>
-                                    <td><p>{{ adv.id }}</p></td>
-                                </tr>
-                                <tr>
-                                    <th>{{ trans('visiosoft.theme.sahibinden::field.ad_date.name') }}</th>
-                                    <td><p>{{ adv.created_at|date('d/m/Y') }}</p></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                    </nav>
+                    <div class="tab-content pb-3 px-sm-0 border-0" id="nav-tabContent">
+                        <div class="tab-pane fade px-3" id="nav-info" role="tabpanel"
+                             aria-labelledby="nav-info-tab">
+                            <ul class="list-unstyled classified-detail">
+                                <li class="row m-0">
+                                    <div class="col-6 p-0 m-0 detail-title">{{ trans('visiosoft.extension.sahibinden_style_provider::field.price.name') }}</div>
+                                    <div class="col-6 p-0 m-0 text-primary detail-value font-weight-bold">
+                                        {% if not setting_value('visiosoft.module.advs::hide_zero_price') or adv.price != "0" %}
+                                            {{ adv.price.currency }}
+                                        {% else %}
+                                            {{ trans('visiosoft.extension.sahibinden_style_provider::field.ask_for_price') }}
+                                        {% endif %}
+
+                                    </div>
+                                </li>
+                                <li class="row m-0">
+                                    <div class="col-6 p-0 m-0 detail-title">{{ trans('visiosoft.extension.sahibinden_style_provider::field.ad.name') }}</div>
+                                    <div class="col-6 p-0 m-0 text-danger detail-value">{{ adv.id }}</div>
+                                </li>
+                                <li class="row m-0">
+                                    <div class="col-6 p-0 m-0 detail-title">{{ trans('visiosoft.extension.sahibinden_style_provider::field.ad_date.name') }}</div>
+                                    <div class="col-6 p-0 m-0 detail-value">{{ adv.created_at|date('d/m/Y') }}</div>
+                                </li>
+                                {{ addBlock('ad-detail/content',{'features_detail':features, 'adv': adv})|raw }}
+                            </ul>
                             {{ addBlock('ad-detail/checkboxes',{'features':features})|raw }}
                         </div>
-                        <div id="tab_3rd" class="tab-contain shipping-delivery-tab">
-                            {% include "visiosoft.module.advs::ad-detail/partials/map" %}
+
+                        <div class="tab-pane fade show active" id="nav-description" role="tabpanel"
+                             aria-labelledby="nav-description-tab">
+                            <h4 class="subject-tab d-none d-sm-block mb-0">{{ trans('visiosoft.module.advs::field.explanation') }}</h4>
+                            <div class="row mx-0 mt-0">
+                                <div class="col-12 classified-description-row mt-0 pt-2">
+                                    <p>{{ adv.advs_desc|raw }}</p>
+                                </div>
+                            </div>
+                            {{ addBlock('ad-detail/checkboxes',{'features':features,'class':'d-none d-md-flex', adv: adv})|raw }}
                         </div>
-                        {{ addBlock('ad-detail/content',{'features_detail':features, 'adv': adv})|raw }}
+
+                        <div class="tab-pane fade show" id="nav-location" role="tabpanel"
+                             aria-labelledby="nav-location-tab">
+                            <div class="classified-description-row">
+                                {% include "visiosoft.module.advs::ad-detail/partials/map" %}
+                            </div>
+                        </div>
+                        <!-- Content With Block -->
+                        {{ addBlock('ad-detail/content',{'features':features,'adv':adv, 'profile': profile, 'show':true})|raw }}
+                        <!-- Content With Block -->
                     </div>
                 </div>
 
