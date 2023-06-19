@@ -56,7 +56,8 @@
                     {% set userId = setting_value('visiosoft.theme.sahibinden::default_owner') ?: adv.created_by_id %}
                     {% set user = setting_value('visiosoft.theme.sahibinden::default_owner') ? entries('users', 'users').find(setting_value('visiosoft.theme.sahibinden::default_owner')) : adv.created_by %}
                     {% set sellerInfo = setting_value('visiosoft.module.advs::hide_seller_info') %}
-                    {% set owner = addBlock('ad-details/owner', {'userId': userId}) %}
+                    {% set storeInfo = getStoreByUserId(userId) %}
+                    {% set owner = addBlock('ad-details/owner', {'store': storeInfo}) %}
 
                     <div class="product-attribute">
                         <h3 class="title">{{ adv.name }}</h3>
